@@ -1,20 +1,20 @@
 # [Unicorn Konami](https://edelstone.github.io/unicorn-konami/)
 
-[![Unicorns in browser](/images/browser.png 'Click for unicorns!')](https://edelstone.github.io/unicorn-konami/)
+[![Unicorns in browser](images/browser.png 'Click for unicorns!')](https://edelstone.github.io/unicorn-konami/)
 
-## Can I use this?
+## How does this work?
 
-Yes. You must.
+[Visit the site](https://edelstone.github.io/unicorn-konami/), click the link or use the Konami code, and the unicorns will appear from the magical forest.
+
+## Can I use this code for whatever I want?
+
+Yes. It is your duty to do so.
 
 ## Why does this exist?
 
-Look at yourself for even asking that.
-
-## How do I get the unicorns?
-
-Click the link or use the Konami code.
+I mean, just look at yourself for even asking that.
 
 ## Resources
 
-- [Resource 1](https://www.youtube.com/watch?v=Q1Ark0BUu6o)
-- [Resource 2](https://www.youtube.com/watch?v=Z1aX1i79rY8)
+- [Why do unicorns represent light?](https://www.youtube.com/watch?v=Q1Ark0BUu6o)
+- [Unicorn behavior and family dynamics](https://www.youtube.com/watch?v=Z1aX1i79rY8)
