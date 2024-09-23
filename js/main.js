@@ -64,7 +64,6 @@
     unicorns() {
       if (this.active) return;
       this.active = true;
-      document.body.style.overflow = "hidden"; // Prevent page scrolling
       document.body.classList.add("unicorn-active"); // Add class to body
 
       // Create and display unicorn images
@@ -116,7 +115,6 @@
       // Clear the timeout and reset state
       clearTimeout(this.hideTimeoutId);
       this.active = false;
-      document.body.style.overflow = "auto";
       document.body.classList.remove("unicorn-active"); // Remove class from body
 
       // Remove all unicorns and text elements
