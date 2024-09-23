@@ -1,0 +1,29 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;
+}
+
+p {
+  font-size: 5rem;
+  text-align: center;
+  margin-top: 15rem;
+}
+
+a {
+  color: #FF0066;
+  cursor: pointer;
+  user-select: none;
+}
+
+.unicorn {
+  position: fixed;
+}
+
+.unicorn-words {
+  font-size: 8rem;
+  text-shadow: #fff 5px 5px;
+  font-weight: bold;
+  position: fixed;
+  top: 1rem;
+  width: 100%;
+  text-align: center;
+}
