@@ -1,6 +1,6 @@
 # <img src="images/15.gif" width="48px" /> [Unicorn Konami](https://edelstone.github.io/unicorn-konami/)
 
-[<img src="images/browser.gif" />](https://edelstone.github.io/unicorn-konami/)
+[![Unicorns](https://github.com/edelstone/unicorn-konami/raw/main/images/browser.gif 'Click for unicorns!')](https://edelstone.github.io/unicorn-konami/)
 
 ## Can I use this?
 
