@@ -16,5 +16,5 @@ I mean, just look at yourself for even asking that.
 
 ## Resources
 
-- [Why do unicorns represent light?](https://www.youtube.com/watch?v=Q1Ark0BUu6o)
-- [Unicorn behavior and family dynamics](https://www.youtube.com/watch?v=Z1aX1i79rY8)
+- [Unicorns and the representation of light and darkness](https://www.youtube.com/watch?v=Q1Ark0BUu6o)
+- [Understanding unicorn behavior and family dynamics](https://www.youtube.com/watch?v=Z1aX1i79rY8)
