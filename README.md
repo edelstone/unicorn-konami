@@ -1,6 +1,6 @@
-# Unicorn Konami
+# <img src="images/15.gif" width="48px" /> [Unicorn Konami](https://edelstone.github.io/unicorn-konami/)
 
-<img src="images/browser.png" />
+[<img src="images/browser.png" />](https://edelstone.github.io/unicorn-konami/)
 
 ## Can I use this?
 
@@ -8,7 +8,7 @@ Yes. You must.
 
 ## Why does this exist?
 
-Just stop and look and yourself for even asking that.
+Look at yourself for even asking that.
 
 ## Resources
 
