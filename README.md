@@ -1,4 +1,4 @@
-# [<img src="icon.svg" width="28px" />](https://michaeledelstone.com) &nbsp;[Unicorn Konami](https://edelstone.github.io/unicorn-konami/)
+# [<img src="icon.svg" width="28px" />](https://edelstone.github.io/unicorn-konami/) &nbsp;[Unicorn Konami](https://edelstone.github.io/unicorn-konami/)
 
 [![Unicorns in browser](images/browser.png 'Click for unicorns!')](https://edelstone.github.io/unicorn-konami/)
 
