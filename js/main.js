@@ -5,11 +5,11 @@
     imageCount: 20,
     imageFormat: ".gif",
     unicornCount: 80,
-    words: "UNICORNS",
+    text: "UNICORNS",
     hideAfter: 6000,
     idPrefix: "unicorn_",
     className: "unicorn",
-    wordsClass: "unicorn-words",
+    textClass: "unicorn-text",
   };
 
   const Unicorn = {
@@ -22,13 +22,29 @@
     init() {
       // Set up listeners for Konami code and button click
       document.documentElement.addEventListener("keyup", (e) => this.keyUp(e));
-      document.getElementById("unicorn-trigger").addEventListener("click", (e) => {
+      const trigger = document.getElementById("unicorn-trigger");
+      trigger.addEventListener("click", (e) => {
         e.stopPropagation();
         this.unicorns();
       });
 
-      // Click anywhere to remove unicorns early
+      // Add keydown event listener for Enter and Space keys on the trigger
+      trigger.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.keyCode === 13 || e.key === " " || e.keyCode === 32) {
+          e.preventDefault();
+          e.stopPropagation(); // Prevent event from bubbling up
+          trigger.click();
+        }
+      });
+
+      // Click anywhere or press any key to remove unicorns early
       document.documentElement.addEventListener("click", () => this.remove());
+      document.documentElement.addEventListener("keydown", (e) => {
+        if (this.active) {
+          e.preventDefault();
+          this.remove();
+        }
+      });
     },
 
     keyUp(e) {
@@ -49,6 +65,7 @@
       if (this.active) return;
       this.active = true;
       document.body.style.overflow = "hidden"; // Prevent page scrolling
+      document.body.classList.add("unicorn-active"); // Add class to body
 
       // Create and display unicorn images
       for (let i = 0; i < UnicornConfig.unicornCount; i++) {
@@ -56,7 +73,7 @@
       }
 
       // Display "UNICORNS" text
-      this.showWords();
+      this.showText();
 
       // Remove unicorns after a set time
       if (UnicornConfig.hideAfter > 0) {
@@ -84,15 +101,15 @@
       document.body.appendChild(unicorn);
     },
 
-    showWords() {
+    showText() {
       // Create and display "UNICORNS" text
-      const words = document.createElement("div");
-      words.id = `${UnicornConfig.idPrefix}_words`;
-      words.className = UnicornConfig.wordsClass;
-      words.innerHTML = UnicornConfig.words;
+      const text = document.createElement("div");
+      text.id = `${UnicornConfig.idPrefix}_text`;
+      text.className = UnicornConfig.textClass;
+      text.innerHTML = UnicornConfig.text;
 
-      this.elements.push(words.id);
-      document.body.appendChild(words);
+      this.elements.push(text.id);
+      document.body.appendChild(text);
     },
 
     remove() {
@@ -100,6 +117,7 @@
       clearTimeout(this.hideTimeoutId);
       this.active = false;
       document.body.style.overflow = "auto";
+      document.body.classList.remove("unicorn-active"); // Remove class from body
 
       // Remove all unicorns and text elements
       this.elements.forEach(id => {
