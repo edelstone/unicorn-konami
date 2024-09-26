@@ -66,9 +66,24 @@
       this.active = true;
       document.body.classList.add("unicorn-active"); // Add class to body
 
-      // Create and display unicorn images
-      for (let i = 0; i < UnicornConfig.unicornCount; i++) {
-        this.createUnicorn(i);
+      // Create an array of indices from 1 to 20
+      const indices = Array.from({ length: UnicornConfig.imageCount }, (_, i) => i + 1);
+
+      // Shuffle the array to randomize the order
+      for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+      }
+
+      // Ensure at least one of each GIF appears in random order
+      for (let i = 0; i < UnicornConfig.imageCount; i++) {
+        this.createUnicorn(i, indices[i]);
+      }
+
+      // Fill the remaining slots with random selections
+      for (let i = UnicornConfig.imageCount; i < UnicornConfig.unicornCount; i++) {
+        const randomImageIndex = Math.floor(Math.random() * UnicornConfig.imageCount) + 1;
+        this.createUnicorn(i, randomImageIndex);
       }
 
       // Display "UNICORNS" text
@@ -80,10 +95,10 @@
       }
     },
 
-    createUnicorn(i) {
+    createUnicorn(i, imageIndex) {
       // Create and configure unicorn image element
       const unicorn = document.createElement("img");
-      unicorn.src = `${UnicornConfig.imagePath}${Math.floor(Math.random() * UnicornConfig.imageCount) + 1}${UnicornConfig.imageFormat}`;
+      unicorn.src = `${UnicornConfig.imagePath}${imageIndex}${UnicornConfig.imageFormat}`;
       unicorn.id = `${UnicornConfig.idPrefix}_image_${i}`;
       unicorn.className = UnicornConfig.className;
 
