@@ -22,7 +22,7 @@ a.standard-link {
 .link {
   cursor: pointer;
   font-weight: 700;
-  font-size: 5rem;
+  font-size: 15vw;
   user-select: none;
   line-height: 1;
 }
@@ -36,7 +36,7 @@ a.standard-link {
 }
 
 .unicorn-text {
-  font-size: 8rem;
+  font-size: 15vw;
   text-shadow: #fff 5px 5px;
   font-weight: 900;
   position: absolute;
@@ -45,26 +45,4 @@ a.standard-link {
 
 .not-found {
   padding: 1rem;
-}
-
-@media screen and (max-width: 650px) {
-
-  .unicorn-text {
-    font-size: 4rem;
-  }
-
-  .link {
-    font-size: 3rem;
-  }
-}
-
-@media screen and (max-width: 350px) {
-
-  .unicorn-text {
-    font-size: 2.5rem;
-  }
-
-  .link {
-    font-size: 2rem;
-  }
 }
