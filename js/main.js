@@ -1,146 +1,170 @@
 (() => {
-
   const UnicornConfig = {
     imagePath: "images/",
     imageCount: 20,
     imageFormat: ".gif",
-    unicornCount: 80,
+    unicornCount: 100,
     text: "UNICORNS",
     hideAfter: 6000,
-    idPrefix: "unicorn_",
     className: "unicorn",
     textClass: "unicorn-text",
   };
 
   const Unicorn = {
-    // Konami code sequence and state tracking
     code: [38, 38, 40, 40, 37, 39, 37, 39, 66, 65, 13],
     index: 0,
     active: false,
     elements: [],
+    hideTimeoutId: null,
 
     init() {
-      // Set up listeners for Konami code and button click
-      document.documentElement.addEventListener("keyup", (e) => this.keyUp(e));
       const trigger = document.getElementById("unicorn-trigger");
+      if (!trigger) return;
+
+      const root = document.documentElement;
+
+      const schedulePreload = window.requestIdleCallback
+        ? (cb) => window.requestIdleCallback(cb, { timeout: 2000 })
+        : (cb) => window.setTimeout(cb, 0);
+
+      schedulePreload(() => this.preloadImages());
+
+      root.addEventListener("keyup", (e) => this.keyUp(e));
       trigger.addEventListener("click", (e) => {
         e.stopPropagation();
         this.unicorns();
       });
 
-      // Add keydown event listener for Enter and Space keys on the trigger
       trigger.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.keyCode === 13 || e.key === " " || e.keyCode === 32) {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          e.stopPropagation(); // Prevent event from bubbling up
+          e.stopPropagation();
           trigger.click();
         }
       });
 
-      // Click anywhere or press any key to remove unicorns early
-      document.documentElement.addEventListener("click", () => this.remove());
-      document.documentElement.addEventListener("keydown", (e) => {
-        if (this.active) {
-          e.preventDefault();
-          this.remove();
-        }
+      root.addEventListener("click", () => this.remove());
+      root.addEventListener("keydown", (e) => {
+        if (!this.active) return;
+        this.remove();
       });
+    },
+
+    preloadImages() {
+      if (this.preloaded) return;
+      this.preloaded = true;
+
+      const preloads = [];
+      const container = document.createElement("div");
+      container.className = "unicorn-preload";
+      container.setAttribute("aria-hidden", "true");
+
+      for (let i = 1; i <= UnicornConfig.imageCount; i++) {
+        const img = document.createElement("img");
+        img.loading = "eager";
+        img.decoding = "async";
+        img.src = `${UnicornConfig.imagePath}${i}${UnicornConfig.imageFormat}`;
+        preloads.push(img);
+        container.appendChild(img);
+      }
+
+      document.body.appendChild(container);
+      this.preloads = preloads;
     },
 
     keyUp(e) {
       const key = e.which || e.keyCode;
-      if (key === this.code[this.index]) {
-        this.index++;
-        // Trigger unicorns if Konami code is completed
-        if (this.index === this.code.length) {
-          this.active ? this.remove() : this.unicorns();
-          this.index = 0;
-        }
-      } else {
-        this.index = 0; // Reset code if sequence is broken
+      if (key !== this.code[this.index]) {
+        this.index = 0;
+        return;
+      }
+
+      this.index += 1;
+      if (this.index === this.code.length) {
+        this.active ? this.remove() : this.unicorns();
+        this.index = 0;
       }
     },
 
     unicorns() {
       if (this.active) return;
       this.active = true;
-      document.body.classList.add("unicorn-active"); // Add class to body
+      document.body.classList.add("unicorn-active");
 
-      // Create an array of indices from 1 to 20
-      const indices = Array.from({ length: UnicornConfig.imageCount }, (_, i) => i + 1);
+      const fragment = document.createDocumentFragment();
+      const bounds = this.getBounds();
+      const imageOrder = this.buildImageOrder();
 
-      // Shuffle the array to randomize the order
-      for (let i = indices.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [indices[i], indices[j]] = [indices[j], indices[i]];
+      for (let i = 0; i < imageOrder.length; i++) {
+        fragment.appendChild(this.createUnicorn(imageOrder[i], bounds));
       }
 
-      // Ensure at least one of each GIF appears in random order
-      for (let i = 0; i < UnicornConfig.imageCount; i++) {
-        this.createUnicorn(i, indices[i]);
-      }
+      fragment.appendChild(this.createText());
+      document.body.appendChild(fragment);
 
-      // Fill the remaining slots with random selections
-      for (let i = UnicornConfig.imageCount; i < UnicornConfig.unicornCount; i++) {
-        const randomImageIndex = Math.floor(Math.random() * UnicornConfig.imageCount) + 1;
-        this.createUnicorn(i, randomImageIndex);
-      }
-
-      // Display "UNICORNS" text
-      this.showText();
-
-      // Remove unicorns after a set time
       if (UnicornConfig.hideAfter > 0) {
         this.hideTimeoutId = setTimeout(() => this.remove(), UnicornConfig.hideAfter);
       }
     },
 
-    createUnicorn(i, imageIndex) {
-      // Create and configure unicorn image element
+    buildImageOrder() {
+      const indices = Array.from({ length: UnicornConfig.imageCount }, (_, i) => i + 1);
+
+      for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+      }
+
+      const order = indices.slice();
+      for (let i = indices.length; i < UnicornConfig.unicornCount; i++) {
+        order.push(Math.floor(Math.random() * UnicornConfig.imageCount) + 1);
+      }
+
+      return order;
+    },
+
+    getBounds() {
+      return {
+        maxTop: window.innerHeight + 50,
+        maxLeft: window.innerWidth + 50,
+      };
+    },
+
+    createUnicorn(imageIndex, bounds) {
       const unicorn = document.createElement("img");
       unicorn.src = `${UnicornConfig.imagePath}${imageIndex}${UnicornConfig.imageFormat}`;
-      unicorn.id = `${UnicornConfig.idPrefix}_image_${i}`;
       unicorn.className = UnicornConfig.className;
 
-      // Position unicorns randomly, allowing them to slightly overflow screen
-      const maxTop = window.innerHeight + 50;
-      const maxLeft = window.innerWidth + 50;
-      const randomTop = Math.random() * (maxTop + 100) - 100;
-      const randomLeft = Math.random() * (maxLeft + 100) - 100;
+      const randomTop = Math.random() * (bounds.maxTop + 100) - 100;
+      const randomLeft = Math.random() * (bounds.maxLeft + 100) - 100;
 
       unicorn.style.top = `${randomTop}px`;
       unicorn.style.left = `${randomLeft}px`;
 
-      this.elements.push(unicorn.id);
-      document.body.appendChild(unicorn);
+      this.elements.push(unicorn);
+      return unicorn;
     },
 
-    showText() {
-      // Create and display "UNICORNS" text
+    createText() {
       const text = document.createElement("div");
-      text.id = `${UnicornConfig.idPrefix}_text`;
       text.className = UnicornConfig.textClass;
-      text.innerHTML = UnicornConfig.text;
-
-      this.elements.push(text.id);
-      document.body.appendChild(text);
+      text.textContent = UnicornConfig.text;
+      this.elements.push(text);
+      return text;
     },
 
     remove() {
-      // Clear the timeout and reset state
-      clearTimeout(this.hideTimeoutId);
-      this.active = false;
-      document.body.classList.remove("unicorn-active"); // Remove class from body
+      if (!this.active && this.elements.length === 0) return;
 
-      // Remove all unicorns and text elements
-      this.elements.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.remove();
-      });
-      this.elements = [];
+      clearTimeout(this.hideTimeoutId);
+      this.hideTimeoutId = null;
+      this.active = false;
+      document.body.classList.remove("unicorn-active");
+
+      this.elements.forEach((el) => el.remove());
+      this.elements.length = 0;
     },
   };
 
-  // Initialize unicorns once the DOM is fully loaded
   document.addEventListener("DOMContentLoaded", () => Unicorn.init());
 })();
